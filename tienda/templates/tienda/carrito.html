@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'tienda/navbar.html' %}
+    <div class="container mt-5">
+        <h1>Carrito de Compras</h1>
+        {% if productos %}
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.titulo }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>${{ producto.precio }}</td>
+                    <td>
+                        <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2"></td>
+                    <td><strong>Total:</strong></td>
+                    <td>${{ total }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <form action="{% url 'tienda:comprar' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Comprar</button>
+        </form>
+        {% else %}
+        <p>No tienes productos en tu carrito.</p>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+

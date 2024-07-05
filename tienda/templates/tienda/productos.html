@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos Aprobados</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% include 'tienda/navbar.html' %}
+    <div class="container mt-5">
+        <h1>Productos Aceptados y a la Venta</h1>
+        <p>En esta sección se mostraran los productos aceptados por los administradores</p>
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Fecha de la publicación</th>
+                    <th>Creado Por</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                {% if not producto.vendido %}
+                <tr>
+                    <td>{{ producto.titulo }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>${{ producto.precio }}</td>
+                    <td>{{ producto.fecha|date:"d/m/Y H:i" }}</td>
+                    <td>{{ producto.usuario.username }}</td>
+                    <td>
+                        <button type="button" class="btn btn-success btn-sm" onclick="location.href='{% url 'tienda:agregar_al_carrito' producto.id %}'">Añadir al carrito</button>
+
+                        {% if user.is_staff %}
+                        <form action="{% url 'tienda:eliminar_producto_2' producto.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+
