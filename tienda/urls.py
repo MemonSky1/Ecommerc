@@ -1,7 +1,10 @@
 from . import views
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'tienda'
+
 
 urlpatterns = [
     
@@ -16,4 +19,4 @@ urlpatterns = [
     path('carrito/', views.ver_carrito, name='ver_carrito'),
     path('eliminar-del-carrito/<int:producto_id>/', views.eliminar_del_carrito, name='eliminar_del_carrito'),
     path('comprar/', views.comprar, name='comprar'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -21,6 +21,7 @@ class Producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     aprobado = models.BooleanField(default=False)
     vendido = models.BooleanField(default=False)
+    imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
 
     def __str__(self):
         return self.titulo

@@ -8,7 +8,12 @@ from django.contrib.auth.decorators import login_required
 
 
 def inicio(request):
-    return render(request, 'tienda/inicio.html')
+    imagenes = [
+        'https://miro.medium.com/v2/resize:fit:720/format:webp/1*kD63_v2-qaX8yzaXt1Zbbw.jpeg',
+        'https://www.unbosque.edu.co/sites/default/files/2021-11/administrador.jpg',
+        'https://okdiario.com/img/2022/02/29/el-origen-del-apreton-de-manos-para-saludar-655x368.jpg',
+    ]
+    return render(request, 'tienda/inicio.html', {'imagenes': imagenes})
 
 
 
@@ -19,7 +24,7 @@ def productos(request):
 
 def agregar_producto(request):
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             producto = form.save(commit=False)
             producto.usuario = request.user
@@ -29,7 +34,7 @@ def agregar_producto(request):
         form = ProductoForm()
     return render(request, 'tienda/agregar_producto.html', {'form': form})
 
-@staff_member_required
+@staff_member_required  
 def eliminar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     producto.delete()

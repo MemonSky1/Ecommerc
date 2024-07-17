@@ -18,6 +18,7 @@
                     <th>Precio</th>
                     <th>Fecha</th>
                     <th>Usuario</th>
+                    <th>Imagen</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -29,6 +30,13 @@
                     <td>${{ producto.precio }}</td>
                     <td>{{ producto.fecha|date:"d/m/Y H:i" }}</td>
                     <td>{{ producto.usuario.username }}</td>
+                    <td>
+                        {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" style="max-width: 150px;">
+                        {% else %}
+                        <p>No image</p>
+                        {% endif %}
+                    </td>
                     <td>
                         <form action="{% url 'tienda:aceptar_producto' producto.pk %}" method="post" style="display:inline;">
                             {% csrf_token %}
@@ -49,6 +57,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
 
 
 
