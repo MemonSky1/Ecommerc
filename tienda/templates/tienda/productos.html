@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Productos Aprobados</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
     {% include 'tienda/navbar.html' %}
@@ -36,7 +37,7 @@
                         {% if producto.imagen %}
                         <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" class="img-thumbnail" style="width: 100px; height: auto;">
                         {% else %}
-                        No Image
+                        Sin Imagen
                         {% endif %}
                     </td>
                     <td>
@@ -58,9 +59,3 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn"></script>
-
-
-
-
-
-

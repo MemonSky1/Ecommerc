@@ -27,9 +27,9 @@
                     <td>{{ producto.descripcion }}</td>
                     <td>${{ producto.precio }}</td>
                     <td>
-                        <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post">
+                        <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post" class="delete-form">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm deleteBtn">Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -43,17 +43,77 @@
         </table>
         <form action="{% url 'tienda:comprar' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success">Comprar</button>
+            <button type="submit" class="btn btn-success" id="comprarBtn">Comprar</button>
         </form>
         {% else %}
         <p>No tienes productos en tu carrito.</p>
         {% endif %}
     </div>
+    <div class="modal fade" id="compraExitoModal" tabindex="-1" role="dialog" aria-labelledby="compraExitoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="compraExitoModalLabel">Compra Exitosa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¡Tu compra ha sido realizada con éxito!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="eliminarExitoModal" tabindex="-1" role="dialog" aria-labelledby="eliminarExitoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarExitoModalLabel">Producto Eliminado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¡El producto ha sido eliminado del carrito!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#comprarBtn').click(function(event) {
+                event.preventDefault();
+                $('#compraExitoModal').modal('show');
+            });
+
+            $('#compraExitoModal').on('hidden.bs.modal', function () {
+                $('form[action="{% url 'tienda:comprar' %}"]').submit();
+            });
+
+            $('.deleteBtn').click(function(event) {
+                event.preventDefault();
+                var form = $(this).closest('form');
+                $('#eliminarExitoModal').modal('show');
+
+                $('#eliminarExitoModal').on('hidden.bs.modal', function () {
+                    form.submit();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+
 
 
 
