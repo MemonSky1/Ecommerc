@@ -5,6 +5,7 @@ from .forms import ProductoForm
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Carrito
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 def inicio(request):
     imagenes = [
@@ -67,12 +68,17 @@ def ver_carrito(request):
         carrito = Carrito.objects.get(usuario=request.user)
         productos_en_carrito = carrito.productos.all()
         total = sum(producto.precio for producto in productos_en_carrito)
+        
+        paginator = Paginator(productos_en_carrito, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
     except Carrito.DoesNotExist:
         return render(request, 'tienda/carrito_vacio.html')
 
     context = {
         'carrito': carrito,
-        'productos': productos_en_carrito,
+        'page_obj': page_obj,
         'total': total,
     }
     return render(request, 'tienda/carrito.html', context)

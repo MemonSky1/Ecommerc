@@ -12,40 +12,90 @@
     <!--Contenedor del carrito-->
     <div class="container mt-5">
         <h1>Carrito de Compras</h1>
-        {% if productos %}
+        {% if page_obj.object_list %}
         <div class="row">
-            {% for producto in productos %}
+            {% for producto in page_obj.object_list %}
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="Imagen de {{ producto.titulo }}">
-                    {% endif %}
+                <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">{{ producto.titulo }}</h5>
                         <p class="card-text">{{ producto.descripcion }}</p>
-                        <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
-                        <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post" class="delete-form">
+                        <p class="card-text">${{ producto.precio }}</p>
+                        {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" class="img-fluid">
+                        {% else %}
+                        <p>Sin Imagen</p>
+                        {% endif %}
+                        <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post" class="delete-form mt-2">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm deleteBtn">Eliminar</button>
+                            <button type="button" class="btn btn-danger btn-sm deleteBtn" data-producto-id="{{ producto.id }}">Eliminar</button>
                         </form>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="row">
-            <div class="col-md-12 text-left">
-                <h4>Total: ${{ total }}</h4>
-                <form action="{% url 'tienda:comprar' %}" method="post" class="d-inline">
+        <!--Aquí está el total y el botón para comprar-->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Total: ${{ total }}</h5>
+                <form action="{% url 'tienda:comprar' %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-success" id="comprarBtn">Comprar</button>
                 </form>
             </div>
         </div>
+        <!--Paginador-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">Primero</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Primero</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Anterior</a>
+                </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ num }}</a>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Siguiente</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Último</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
         {% else %}
         <p>No tienes productos en tu carrito.</p>
         {% endif %}
     </div>
+
     <!--Config del modal cuando se compre el carrito-->
     <div class="modal fade" id="compraExitoModal" tabindex="-1" role="dialog" aria-labelledby="compraExitoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -85,8 +135,9 @@
             </div>
         </div>
     </div>
+
     <!--Scripts-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!--Funcion con javascript-->
@@ -103,23 +154,31 @@
 
             $('.deleteBtn').click(function(event) {
                 event.preventDefault();
-                var form = $(this).closest('form');
+                var button = $(this);
+                var form = button.closest('form');
+
                 $('#eliminarExitoModal').modal('show');
 
+                
                 $('#eliminarExitoModal').on('hidden.bs.modal', function () {
-                    form.submit();
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'POST',
+                        data: form.serialize(),
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error al eliminar el producto:', error);
+                            alert('Ocurrió un error al intentar eliminar el producto.');
+                        }
+                    });
                 });
+            });
+            $('#eliminarExitoModal').on('show.bs.modal', function () {
+                $('#eliminarExitoModal').off('hidden.bs.modal');
             });
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
