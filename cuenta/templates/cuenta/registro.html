@@ -13,13 +13,15 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    
+    <!--Navbar-->
     {% include 'tienda/navbar.html' %}
+    <!--Registrarse-->
     <div class="container">
         <h1>Registro</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            <!--Boton para registrarse-->
             <button type="submit">Registrar</button>
         </form>
     </div>

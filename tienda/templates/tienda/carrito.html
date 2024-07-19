@@ -7,48 +7,46 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- Nav bar -->
     {% include 'tienda/navbar.html' %}
+    <!--Contenedor del carrito-->
     <div class="container mt-5">
         <h1>Carrito de Compras</h1>
         {% if productos %}
-        <table class="table table-bordered table-hover mt-3">
-            <thead class="thead-light">
-                <tr>
-                    <th>Nombre Producto</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for producto in productos %}
-                <tr>
-                    <td>{{ producto.titulo }}</td>
-                    <td>{{ producto.descripcion }}</td>
-                    <td>${{ producto.precio }}</td>
-                    <td>
+        <div class="row">
+            {% for producto in productos %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="Imagen de {{ producto.titulo }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.titulo }}</h5>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <p class="card-text"><strong>Precio:</strong> ${{ producto.precio }}</p>
                         <form action="{% url 'tienda:eliminar_del_carrito' producto.id %}" method="post" class="delete-form">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm deleteBtn">Eliminar</button>
                         </form>
-                    </td>
-                </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="2"></td>
-                    <td><strong>Total:</strong></td>
-                    <td>${{ total }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <form action="{% url 'tienda:comprar' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success" id="comprarBtn">Comprar</button>
-        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-left">
+                <h4>Total: ${{ total }}</h4>
+                <form action="{% url 'tienda:comprar' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success" id="comprarBtn">Comprar</button>
+                </form>
+            </div>
+        </div>
         {% else %}
         <p>No tienes productos en tu carrito.</p>
         {% endif %}
     </div>
+    <!--Config del modal cuando se compre el carrito-->
     <div class="modal fade" id="compraExitoModal" tabindex="-1" role="dialog" aria-labelledby="compraExitoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -58,6 +56,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <!--Se mostrara esto en el modal-->
                 <div class="modal-body">
                     ¡Tu compra ha sido realizada con éxito!
                 </div>
@@ -67,6 +66,7 @@
             </div>
         </div>
     </div>
+    <!--Config del modal cuando se elimine producto-->
     <div class="modal fade" id="eliminarExitoModal" tabindex="-1" role="dialog" aria-labelledby="eliminarExitoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -85,10 +85,11 @@
             </div>
         </div>
     </div>
-
+    <!--Scripts-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--Funcion con javascript-->
     <script>
         $(document).ready(function() {
             $('#comprarBtn').click(function(event) {
@@ -113,6 +114,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-
+    <!--Navbar-->
     {% include 'tienda/navbar.html' %}
     
     <div class="container mt-4">
@@ -18,6 +18,7 @@
                 <h1 class="mb-0">Formulario Para Publicar Tu Producto</h1>
             </div>
             <div class="card-body">
+                <!--Formulario a llenar-->
                 <form id="productoForm" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
@@ -36,12 +37,13 @@
                         <label for="id_imagen">Imagen</label>
                         {{ form.imagen }}
                     </div>
+                    <!--Boton para enviar formulario-->
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </form>
             </div>
         </div>
     </div>
-
+    <!--MODAL-->
     <div class="modal fade" id="envioExitosoModal" tabindex="-1" role="dialog" aria-labelledby="envioExitosoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -60,11 +62,11 @@
             </div>
         </div>
     </div>
-    
+    <!--SCRIPTS-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <!--FUNCION JAVASCRIPT-->
     <script>
         $(document).ready(function() {
             $('#productoForm').submit(function(event) {

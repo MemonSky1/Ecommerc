@@ -8,6 +8,7 @@
 
 </head>
 <body>
+    <!--Navbar-->
     {% include 'tienda/navbar.html' %}
     <div class="container mt-5">
         <h1>Productos Aceptados y a la Venta</h1>
@@ -15,6 +16,7 @@
         <table class="table table-bordered table-hover mt-3">
             <thead class="thead-light">
                 <tr>
+                    <!--Lista con la info de productos-->
                     <th>Nombre Producto</th>
                     <th>Descripción</th>
                     <th>Precio</th>
@@ -25,7 +27,9 @@
                 </tr>
             </thead>
             <tbody>
+                <!--FOR para recorrer productos-->
                 {% for producto in productos %}
+                <!--IF para ver si el producto no fue vendido-->
                 {% if not producto.vendido %}
                 <tr>
                     <td>{{ producto.titulo }}</td>
@@ -34,18 +38,22 @@
                     <td>{{ producto.fecha|date:"d/m/Y H:i" }}</td>
                     <td>{{ producto.usuario.username }}</td>
                     <td>
+                        <!--IF para la imagen-->
                         {% if producto.imagen %}
                         <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" class="img-thumbnail" style="width: 100px; height: auto;">
                         {% else %}
+                        <!--Si no hay imagen saldra Sin Imagen-->
                         Sin Imagen
                         {% endif %}
                     </td>
                     <td>
+                        <!--Boton para añadir al carrito-->
                         <button type="button" class="btn btn-success btn-sm" onclick="location.href='{% url 'tienda:agregar_al_carrito' producto.id %}'">Añadir al carrito</button>
-
+                        <!--IF para ver si el usuario es staff-->
                         {% if user.is_staff %}
                         <form action="{% url 'tienda:eliminar_producto_2' producto.pk %}" method="post" style="display:inline;">
                             {% csrf_token %}
+                            <!--Si es staff podra eliminar productos-->
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                         {% endif %}
@@ -56,6 +64,7 @@
             </tbody>
         </table>
     </div>
+    <!--Scripts-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn"></script>

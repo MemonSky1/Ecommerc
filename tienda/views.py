@@ -1,11 +1,10 @@
-from .models import Producto, default_username
+from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import ProductoForm
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Carrito
 from django.contrib.auth.decorators import login_required
-
 
 def inicio(request):
     imagenes = [
@@ -15,12 +14,9 @@ def inicio(request):
     ]
     return render(request, 'tienda/inicio.html', {'imagenes': imagenes})
 
-
-
 def productos(request):
     productos_aprobados = Producto.objects.filter(aprobado=True)
     return render(request, 'tienda/productos.html', {'productos': productos_aprobados})
-
 
 def agregar_producto(request):
     if request.method == 'POST':

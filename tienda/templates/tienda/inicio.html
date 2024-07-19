@@ -6,12 +6,13 @@
   <title>E-commerce</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   {% load static %}
+  <!--Static del CSS-->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-
+  <!--Navbar-->
   {% include 'tienda/navbar.html' %}
-
+  <!--Container con el mensaje de inicio-->
   <div class="container mt-4">
     {% block content %}
     <div class="jumbotron">
@@ -20,7 +21,7 @@
       <hr class="my-4">
     </div>
 
-
+    <!--Carrusel-->
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <div class="carousel-indicators">
             {% for imagen in imagenes %}
@@ -28,6 +29,7 @@
             {% endfor %}
         </div>
         <div class="carousel-inner">
+          <!--For para que las imagenes cambien por su cuenta-->
             {% for imagen in imagenes %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <img src="{{ imagen }}" class="d-block w-100" alt="Imagen {{ forloop.counter }}">
@@ -37,7 +39,7 @@
     </div>
     {% endblock %}
   </div>
-
+<!--Scripts-->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
